@@ -5,9 +5,6 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
-#gvim swap files
-*.swp
-
 # Visual Studio cache directory
 .vs/
 
