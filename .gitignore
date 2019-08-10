@@ -7,6 +7,8 @@ Assets/AssetStoreTools*
 
 #gvim swap files
 *.swp
+# Manifest file
+D:/Documents/GitHub/SciFi/Corridor/Packages/manifest.json
 
 # Visual Studio cache directory
 .vs/
