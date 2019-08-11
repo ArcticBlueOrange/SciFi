@@ -25,8 +25,8 @@ public class EnemyController : MonoBehaviour
             case 0: //idle
                 idle();
                 break;
-            case 1: //path
-                search();
+            case 1: //patrol
+                patrol();
                 break;
             case 2:
                 chase();
@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    void search()
+    void patrol()
     {
 
     }
@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
         {
             state = 2;
         }
-    }
+    }         
 
     void chase()
     {
@@ -60,21 +60,23 @@ public class EnemyController : MonoBehaviour
         transform.LookAt(Player);
         if (Vector3.Distance(transform.position, Player.position) >= MinDist)
         {
-
+        
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
-
-
+        
+        
             if (Vector3.Distance(transform.position, Player.position) <= MaxDist)
             {
                 // Destroy(this.gameObject, 1f);
-
+        
             }
         }
-        lastSeen = Time.deltaTime;
+        lastSeen += Time.deltaTime;
         if (lastSeen >= timeToIdle)
         {
             lastSeen = 0;
             state = 0;
         }
+        //TODO - Transform player must be updated with the last seen position of the player if lastSeen is too high
+        //TODO - Path to follow;
     }
 }
