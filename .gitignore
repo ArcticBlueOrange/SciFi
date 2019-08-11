@@ -5,8 +5,13 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
-#gvim swap files
+#gvim temp files
 *.swp
+*.swo
+*.sw
+*~
+
+
 # Manifest file
 D:/Documents/GitHub/SciFi/Corridor/Packages/manifest.json
 
