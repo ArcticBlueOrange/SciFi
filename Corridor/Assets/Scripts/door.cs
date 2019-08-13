@@ -6,6 +6,8 @@ public class door : MonoBehaviour
 {
 
     private bool trig = false;
+   
+
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +24,7 @@ public class door : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+     void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
@@ -31,8 +33,9 @@ public class door : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+     void OnTriggerExit(Collider other)
     {
+        
         if (other.tag == "Player")
         {
             Debug.Log("Exit trig");
