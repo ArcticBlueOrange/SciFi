@@ -29,16 +29,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    //private IEnumerator FollowPath(Vector3 wayPoints)
-    //{
-    //    transform.position = wayPoints[0];
-    //    int targetPositionIndex = 1;
-    //    Vector3 targetWayPointPosition = wayPoints[1];
-    //    while (true)
-    //    {
-    //        transform.position = Vector3.MoveTowards(targetWayPointPosition, )
-    //    }
-    //}
 
     void Update()
     {
