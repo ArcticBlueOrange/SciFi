@@ -6,37 +6,60 @@ public class zombieAnimation : MonoBehaviour
 {
     public Animator animator;
     public bool isAnimating = false;
-    public bool timing = false;
-    public bool attack = false;
+    public static bool walk = false;
+    public static bool attack = false;
+    public static bool idle = false;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        Invoke("startWalk", 5);
-        Invoke("startAttack", 10);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(timing && attack==false)
+        if(walk)
         {
-            animator.SetBool("isTime", true);
+            animator.SetBool("isWalk", true);
+            animator.SetBool("isTrigger", false);
+            animator.SetBool("isIdle", false);
         }
         if (attack)
         {
-            animator.SetBool("isTime", false);
             animator.SetBool("isTrigger", true);
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isIdle", false);
+        }
+        if (idle)
+        {
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isTrigger", false);
+            animator.SetBool("isIdle", true);
         }
     }
 
-    void startWalk()
+    public static void startWalk()
     {
-        timing = !timing;
+        Debug.Log("walk");
+        walk = !walk;
+        idle = false;
+        attack = false;
     }
 
-    void startAttack()
+    public static void startAttack()
     {
+        Debug.Log("attack");
         attack = !attack;
+        walk = false;
+        idle = false;
+    }
+
+    public static void startIdle()
+    {
+        Debug.Log("idle");
+        idle = !idle;
+        walk = false;
+        attack = false;
     }
 }

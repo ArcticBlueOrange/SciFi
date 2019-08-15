@@ -60,7 +60,9 @@ public class EnemyController : MonoBehaviour
         {
             timeWaited = 0;
             state = 1;//patrol
-            
+            zombieAnimation.startWalk();
+
+
         }
     }
 
@@ -72,6 +74,7 @@ public class EnemyController : MonoBehaviour
         if(distanceFromWayPoint <= 0.5f)
         {
             state = 0; //idle
+            zombieAnimation.startIdle();
             targetPoint = (targetPoint + 1) % wayPoints.Length;
         }
     }
@@ -81,6 +84,7 @@ public class EnemyController : MonoBehaviour
         if (other.tag == "Player")
         {
             state = 2;
+            zombieAnimation.startAttack();
             timeWaited = 0;
             lastSeen = 0;
         }
