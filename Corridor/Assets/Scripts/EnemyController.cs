@@ -27,6 +27,7 @@ public class EnemyController : MonoBehaviour
         {
             wayPoints[i] = patHolder.GetChild(i).position;
         }
+        
     }
 
 
@@ -49,28 +50,30 @@ public class EnemyController : MonoBehaviour
     void idle()
     {
         //rotate on place
-        Vector3 targetDir = wayPoints[targetPoint] - transform.position;
+        Vector3 targetDir = new Vector3(wayPoints[targetPoint].x - transform.position.x,
+                                        transform.forward.y,
+                                        wayPoints[targetPoint].z - transform.position.z);
         float step = rotateSpeed * Time.deltaTime;
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
 
         timeWaited += Time.deltaTime;
-        
         if (timeWaited >= timeInIdle)
         {
             timeWaited = 0;
             state = 1;//patrol
             zombieAnimation.startWalk();
-
-
         }
     }
 
     void patrol()
     {
-        transform.LookAt(wayPoints[targetPoint]);
+        transform.LookAt( new Vector3(wayPoints[targetPoint].x,
+                                      transform.position.y,
+                                      wayPoints[targetPoint].z));
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         float distanceFromWayPoint = Vector3.Distance(transform.position, wayPoints[targetPoint]);
+        //TODO, instead of move, call the script AIDestinationSetter and change the destination
         if(distanceFromWayPoint <= 0.5f)
         {
             state = 0; //idle
@@ -94,6 +97,7 @@ public class EnemyController : MonoBehaviour
     {
         //Moves toward player
         transform.LookAt(Player);
+        //TODO, instead of move, call the script AIDestinationSetter and change the destination to Player
         if (Vector3.Distance(transform.position, Player.position) >= MinDist)
         {
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
