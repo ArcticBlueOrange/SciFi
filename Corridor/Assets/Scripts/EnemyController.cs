@@ -13,19 +13,20 @@ public class EnemyController : MonoBehaviour
     public float lastSeen;
     public float timeInIdle;
     public float timeWaited;
-    public Transform Player;
+    public Transform Playerholder;
     public Transform patHolder;
-    private Vector3[] wayPoints;
+    //private Vector3[] wayPoints;
+    private Transform[] wayPoints;
     public int targetPoint;
     public float rotateSpeed;
 
     void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player").transform;
-        wayPoints = new Vector3[patHolder.childCount];
+        Playerholder = GameObject.FindGameObjectWithTag("Player").transform;
+        wayPoints = new Transform[patHolder.childCount];//new Vector3[patHolder.childCount];
         for (int i = 0; i < wayPoints.Length; i++)
         {
-            wayPoints[i] = patHolder.GetChild(i).position;
+            wayPoints[i] = patHolder.GetChild(i).transform;
         }
         
     }
@@ -50,12 +51,14 @@ public class EnemyController : MonoBehaviour
     void idle()
     {
         //rotate on place
-        Vector3 targetDir = new Vector3(wayPoints[targetPoint].x - transform.position.x,
+        //Need to check if all this is removable
+        Vector3 targetDir = new Vector3(wayPoints[targetPoint].position.x - transform.position.x,
                                         transform.forward.y,
-                                        wayPoints[targetPoint].z - transform.position.z);
+                                        wayPoints[targetPoint].position.z - transform.position.z);
         float step = rotateSpeed * Time.deltaTime;
         Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
         transform.rotation = Quaternion.LookRotation(newDir);
+        //GetComponent<Pathfinding.AIDestinationSetter>().target = null;
 
         timeWaited += Time.deltaTime;
         if (timeWaited >= timeInIdle)
@@ -68,13 +71,14 @@ public class EnemyController : MonoBehaviour
 
     void patrol()
     {
-        transform.LookAt( new Vector3(wayPoints[targetPoint].x,
+        //check if this is removable?
+        transform.LookAt( new Vector3(wayPoints[targetPoint].position.x,
                                       transform.position.y,
-                                      wayPoints[targetPoint].z));
-        transform.position += transform.forward * MoveSpeed * Time.deltaTime;
-        float distanceFromWayPoint = Vector3.Distance(transform.position, wayPoints[targetPoint]);
-        //TODO, instead of move, call the script AIDestinationSetter and change the destination
-        if(distanceFromWayPoint <= 0.5f)
+                                      wayPoints[targetPoint].position.z));
+        //transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+        GetComponent<Pathfinding.AIDestinationSetter>().target = wayPoints[targetPoint];
+        float distanceFromWayPoint = Vector3.Distance(transform.position, wayPoints[targetPoint].position);
+        if (distanceFromWayPoint <= 0.5f)
         {
             state = 0; //idle
             zombieAnimation.startIdle();
@@ -96,17 +100,18 @@ public class EnemyController : MonoBehaviour
     void chase()
     {
         //Moves toward player
-        transform.LookAt(Player);
+        transform.LookAt(Playerholder);
         //TODO, instead of move, call the script AIDestinationSetter and change the destination to Player
-        if (Vector3.Distance(transform.position, Player.position) >= MinDist)
-        {
-            transform.position += transform.forward * MoveSpeed * Time.deltaTime;
-            if (Vector3.Distance(transform.position, Player.position) <= MaxDist)
-            {
-                // Destroy(this.gameObject, 1f);
-        
-            }
-        }
+        GetComponent<Pathfinding.AIDestinationSetter>().target = Playerholder;
+        //if (Vector3.Distance(transform.position, Playerholder.position) >= MinDist)
+        //{
+        //    transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+        //    if (Vector3.Distance(transform.position, Playerholder.position) <= MaxDist)
+        //    {
+        //        // Destroy(this.gameObject, 1f);
+        //
+        //    }
+        //}
         lastSeen += Time.deltaTime;
         if (lastSeen >= timeInChase)
         {
